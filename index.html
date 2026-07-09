@@ -596,4 +596,215 @@
     {key:"all",  label:"सभी",             icon:"✨"},
     {key:"electronics", label:"Electronics", icon:"📱"},
     {key:"fashion", label:"Fashion",        icon:"👕"},
-    {key:"care", label:"Persona
+    {key:"care", label:"Personal Care",     icon:"🧴"},
+    {key:"home", label:"Home & Kitchen",    icon:"🏠"},
+    {key:"fitness", label:"Fitness",        icon:"🏋️"},
+    {key:"car", label:"Car & Travel",       icon:"🚗"},
+    {key:"baby", label:"Baby & Kids",       icon:"👶"}
+  ];
+
+  const WHATSAPP_NUMBER = "917296019690"; // Owner's WhatsApp number
+
+  // ---------------- State ----------------
+  let activeCategory = "all";
+  let cart = {}; // { productId: qty }
+
+  // ---------------- Category chips ----------------
+  function renderCategoryChips(){
+    const wrap = document.getElementById('cat-scroll');
+    wrap.innerHTML = categories.map(c => `
+      <button class="cat-chip ${c.key===activeCategory ? 'active':''}" onclick="setCategory('${c.key}')">
+        ${c.icon} ${c.label}
+      </button>`).join('');
+  }
+
+  function setCategory(key){
+    activeCategory = key;
+    renderCategoryChips();
+    renderProducts();
+  }
+
+  // ---------------- Product rendering ----------------
+  function getFilteredProducts(){
+    const query = document.getElementById('search').value.trim().toLowerCase();
+    return products.filter(p => {
+      const matchesCat = activeCategory === 'all' || p.cat === activeCategory;
+      const matchesSearch = !query || p.name.toLowerCase().includes(query);
+      return matchesCat && matchesSearch;
+    });
+  }
+
+  function renderProducts(){
+    const list = getFilteredProducts();
+    const grid = document.getElementById('store-products');
+    document.getElementById('result-info').textContent = `${list.length} प्रोडक्ट मिले`;
+
+    if(list.length === 0){
+      grid.innerHTML = `<div class="no-results"><div class="big">🔍</div>कोई प्रोडक्ट नहीं मिला<br>कुछ और खोजकर देखें</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(p => {
+      const qty = cart[p.id] || 0;
+      return `
+        <div class="product-card">
+          <div>
+            <div class="p-icon">${p.icon}</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-tag">₹${p.price}</div>
+          </div>
+          ${qty === 0
+            ? `<button class="btn-add" onclick="addToCart(${p.id})">Add to Cart</button>`
+            : `<div class="qty-stepper">
+                 <button onclick="changeQty(${p.id}, -1)" aria-label="Decrease">−</button>
+                 <span class="qty-val">${qty}</span>
+                 <button onclick="changeQty(${p.id}, 1)" aria-label="Increase">+</button>
+               </div>`
+          }
+        </div>`;
+    }).join('');
+  }
+
+  // ---------------- Cart logic ----------------
+  function addToCart(id){
+    cart[id] = (cart[id] || 0) + 1;
+    const p = products.find(x => x.id === id);
+    showToast(`${p.name} कार्ट में जुड़ गया ✓`);
+    renderProducts();
+    updateCartChrome();
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id] += delta;
+    if(cart[id] <= 0) delete cart[id];
+    renderProducts();
+    renderReceipt();
+    updateCartChrome();
+  }
+
+  function removeFromCart(id){
+    delete cart[id];
+    renderProducts();
+    renderReceipt();
+    updateCartChrome();
+  }
+
+  function clearCart(){
+    if(Object.keys(cart).length === 0) return;
+    if(!confirm('क्या आप पूरा कार्ट खाली करना चाहते हैं?')) return;
+    cart = {};
+    renderProducts();
+    renderReceipt();
+    updateCartChrome();
+  }
+
+  function cartEntries(){
+    return Object.entries(cart).map(([id, qty]) => {
+      const p = products.find(x => x.id === Number(id));
+      return {product: p, qty};
+    }).filter(e => e.product);
+  }
+
+  function cartTotal(){
+    return cartEntries().reduce((sum, e) => sum + e.product.price * e.qty, 0);
+  }
+
+  function cartCount(){
+    return Object.values(cart).reduce((a,b) => a+b, 0);
+  }
+
+  // ---------------- Chrome (header / sticky bar) ----------------
+  function updateCartChrome(){
+    const count = cartCount();
+    const total = cartTotal();
+
+    document.getElementById('cart-count').textContent = count;
+    document.getElementById('cart-total-mini').textContent = total;
+    document.getElementById('sticky-count').textContent = count;
+    document.getElementById('sticky-total').textContent = total;
+
+    const stickyBar = document.getElementById('sticky-bar');
+    const modalOpen = document.getElementById('cartModal').classList.contains('show');
+    stickyBar.classList.toggle('show', count > 0 && !modalOpen);
+
+    const link = document.getElementById('whatsapp-link');
+    if(count === 0){
+      link.classList.add('disabled');
+      link.href = '#';
+    } else {
+      link.classList.remove('disabled');
+      let txt = `नमस्ते रेयाज़ भाई, मुझे ऑर्डर प्लेस करना है:\n\n`;
+      cartEntries().forEach(e => {
+        txt += `- ${e.product.name} x${e.qty} = ₹${e.product.price * e.qty}\n`;
+      });
+      txt += `\n*Total Amount: ₹${total}*`;
+      link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(txt)}`;
+    }
+  }
+
+  // ---------------- Receipt (modal body) ----------------
+  function renderReceipt(){
+    const entries = cartEntries();
+    document.getElementById('receipt-sub').textContent =
+      entries.length === 0 ? 'कार्ट अभी खाली है' : `${cartCount()} आइटम`;
+
+    const body = document.getElementById('receipt-body');
+    if(entries.length === 0){
+      body.innerHTML = `<div class="receipt-empty"><div class="big">🛒</div>अभी कुछ भी कार्ट में नहीं है<br>प्रोडक्ट चुनकर "Add to Cart" दबाएं</div>`;
+      return;
+    }
+
+    let html = entries.map(e => `
+      <div class="cart-row">
+        <span class="name">${e.product.icon} ${e.product.name}</span>
+        <div class="row-right">
+          <div class="mini-stepper">
+            <button onclick="changeQty(${e.product.id}, -1)">−</button>
+            <span class="v">${e.qty}</span>
+            <button onclick="changeQty(${e.product.id}, 1)">+</button>
+          </div>
+          <span class="line-total">₹${e.product.price * e.qty}</span>
+          <button class="remove-x" onclick="removeFromCart(${e.product.id})" aria-label="Remove">✕</button>
+        </div>
+      </div>`).join('');
+
+    html += `
+      <div class="receipt-total">
+        <span class="label">TOTAL</span>
+        <span class="val">₹${cartTotal()}</span>
+      </div>`;
+
+    body.innerHTML = html;
+  }
+
+  // ---------------- Modal toggle ----------------
+  function toggleCart(){
+    const modal = document.getElementById('cartModal');
+    const isShowing = modal.classList.contains('show');
+    if(isShowing){
+      modal.classList.remove('show');
+    } else {
+      renderReceipt();
+      modal.classList.add('show');
+    }
+    updateCartChrome();
+  }
+
+  // ---------------- Toast ----------------
+  let toastTimer;
+  function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  // ---------------- Init ----------------
+  renderCategoryChips();
+  renderProducts();
+  updateCartChrome();
+</script>
+</body>
+</html>
