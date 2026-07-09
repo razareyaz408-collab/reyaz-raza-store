@@ -40,9 +40,7 @@
 </head>
 <body>
 
-    <header>
-        onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
-    </header>
+    
 <div style="background:#ffcc00;color:#000;padding:12px;text-align:center;font-weight:bold;font-size:16px;">
 🎉 Welcome to Reyaz Raza Online Store | 🚚 Free Delivery on Selected Products | 💥 Big Discount Available
 </div>
@@ -57,7 +55,16 @@
 
 <button style="padding:10px 18px;border:none;border-radius:20px;background:#ff9900;color:#fff;font-weight:bold;">🛒 All</button>
 
-<button style="padding:10px 18px;border:none;border-radius:20px;background:#232f3e;color:#fff;">📱 Mobile</button>
+<button style="padding:10px 18px;border:none;borde<header>
+    <div class="logo-box">
+        <h1>Reyaz Raza Store</h1>
+        <p>Owner: Mohd Reyaz Raza</p>
+    </div>
+
+    <div class="cart-box" onclick="toggleCart()">
+        🛒 Cart (<span id="cart-count">0</span>)
+    </div>
+</header>r-radius:20px;background:#232f3e;color:#fff;">📱 Mobile</button>
 
 <button style="padding:10px 18px;border:none;border-radius:20px;background:#232f3e;color:#fff;">💻 Laptop</button>
 
@@ -65,7 +72,11 @@
 
 </div>
 
-<input type="text" id="search" class="search-box" ..." placeholder="प्रोडक्ट का नाम खोजें (Search products...)" onkeyup="searchProduct()">
+<input type="text"
+id="search"
+class="search-box"
+placeholder="प्रोडक्ट का नाम खोजें"
+onkeyup="searchProduct()">-box" ..." placeholder="प्रोडक्ट का नाम खोजें (Search products...)" onkeyup="searchProduct()">
         
         <div class="products-grid" id="store-products">
             <!-- Products will load here automatically via JavaScript -->
@@ -73,7 +84,7 @@
     </div>
 
     <!-- Cart Modal -->
-    <header style="background:#131921;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;">
+
 
 <div>
 <h1 style="color:#ff9900;margin:0;font-size:28px;">
