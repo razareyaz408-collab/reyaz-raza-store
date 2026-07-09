@@ -1,329 +1,599 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Pro Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class'
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reyaz Raza Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Mukta:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#14213D;
+    --navy-2:#1E2F5C;
+    --marigold:#F2A93B;
+    --marigold-2:#F7C873;
+    --maroon:#B23A2E;
+    --paper:#FBF7EF;
+    --paper-2:#F3ECDC;
+    --ink:#26221C;
+    --ink-soft:#6B6353;
+    --whatsapp:#25D366;
+    --whatsapp-dark:#1DA851;
+    --line:#E6DCC4;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Mukta',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding-bottom:90px;
+  }
+  h1,h2,h3,.display{font-family:'Poppins',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+    gap:12px;
+  }
+  .logo-box h1{font-size:19px;letter-spacing:.2px;color:var(--marigold-2);font-weight:800;}
+  .logo-box p{font-size:11px;color:#C9D0E0;margin-top:2px;}
+  .cart-box{
+    background:var(--marigold);
+    color:var(--navy);
+    padding:9px 14px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    border:none;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+    transition:transform .15s ease;
+  }
+  .cart-box:active{transform:scale(.96);}
+  .cart-box .amt{font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(242,169,59,.35), transparent 40%),
+      var(--navy-2);
+    color:#fff;
+    padding:34px 20px 28px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-tag{
+    display:inline-block;
+    background:var(--maroon);
+    color:#fff;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:4px;
+    transform:rotate(-2deg);
+    margin-bottom:12px;
+    letter-spacing:.5px;
+  }
+  .hero h2{font-size:27px;font-weight:800;margin-bottom:8px;}
+  .hero p{font-size:14px;color:#D8DEEC;}
+
+  /* ---------- Filters ---------- */
+  .container{max-width:1100px;margin:0 auto;padding:18px 15px 0;}
+  .search-box{
+    width:100%;
+    padding:13px 16px;
+    margin-bottom:14px;
+    border:2px solid var(--line);
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+    background:#fff;
+    font-family:'Mukta',sans-serif;
+    transition:border-color .15s;
+  }
+  .search-box:focus{border-color:var(--marigold);}
+
+  .cat-scroll{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:16px;
+    scrollbar-width:none;
+  }
+  .cat-scroll::-webkit-scrollbar{display:none;}
+  .cat-chip{
+    flex:0 0 auto;
+    background:#fff;
+    border:1.5px solid var(--line);
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:.15s;
+  }
+  .cat-chip.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:#fff;
+  }
+
+  .result-info{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- Product grid ---------- */
+  .products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+    gap:14px;
+    padding-bottom:20px;
+  }
+  .product-card{
+    background:var(--card);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 1px 4px rgba(0,0,0,.06);
+    text-align:center;
+    padding:14px 10px 12px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    border:1px solid var(--line);
+    transition:box-shadow .15s, transform .15s;
+  }
+  .product-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);transform:translateY(-2px);}
+  .p-icon{font-size:36px;margin:6px 0 8px;}
+  .product-title{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:8px;
+    min-height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1.25;
+  }
+  .price-tag{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--maroon);
+    color:#fff;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:15px;
+    padding:5px 12px 5px 16px;
+    border-radius:3px 8px 8px 3px;
+    margin:0 auto 10px;
+  }
+  .price-tag::before{
+    content:'';
+    position:absolute;
+    left:5px;
+    top:50%;
+    transform:translateY(-50%);
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--paper);
+  }
+  .btn-add{
+    background:var(--marigold);
+    border:none;
+    border-radius:7px;
+    padding:9px;
+    cursor:pointer;
+    font-weight:700;
+    width:100%;
+    font-size:13px;
+    color:var(--navy);
+    transition:.15s;
+  }
+  .btn-add:hover{background:var(--marigold-2);}
+  .btn-add:active{transform:scale(.97);}
+
+  .qty-stepper{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--navy);
+    border-radius:7px;
+    overflow:hidden;
+  }
+  .qty-stepper button{
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    padding:8px 14px;
+    cursor:pointer;
+  }
+  .qty-stepper button:active{background:rgba(255,255,255,.15);}
+  .qty-stepper .qty-val{
+    color:#fff;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .no-results{
+    grid-column:1/-1;
+    text-align:center;
+    padding:40px 15px;
+    color:var(--ink-soft);
+  }
+  .no-results .big{font-size:38px;margin-bottom:8px;}
+
+  /* ---------- Sticky bottom bar ---------- */
+  .sticky-cart-bar{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    background:var(--navy);
+    color:#fff;
+    padding:13px 18px;
+    display:none;
+    justify-content:space-between;
+    align-items:center;
+    z-index:150;
+    box-shadow:0 -3px 12px rgba(0,0,0,.18);
+    cursor:pointer;
+  }
+  .sticky-cart-bar.show{display:flex;}
+  .sticky-cart-bar .left{font-size:13px;}
+  .sticky-cart-bar .left .count{font-weight:700;color:var(--marigold-2);}
+  .sticky-cart-bar .right{
+    background:var(--marigold);
+    color:var(--navy);
+    padding:8px 16px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:13px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--navy);
+    color:#B9C1D6;
+    text-align:center;
+    padding:20px;
+    margin-top:20px;
+    font-size:13px;
+  }
+  footer strong{color:#fff;}
+
+  /* ---------- Cart modal (receipt style) ---------- */
+  .cart-modal{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(20,33,61,.55);
+    justify-content:center;
+    align-items:flex-end;
+    z-index:200;
+    padding:0;
+  }
+  .cart-modal.show{display:flex;}
+  .receipt{
+    background:var(--paper);
+    width:100%;
+    max-width:460px;
+    max-height:86vh;
+    border-radius:16px 16px 0 0;
+    display:flex;
+    flex-direction:column;
+    animation:slideUp .22s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+  .receipt-head{
+    padding:18px 20px 12px;
+    text-align:center;
+    border-bottom:2px dashed var(--line);
+  }
+  .receipt-head h2{font-size:17px;color:var(--navy);}
+  .receipt-head p{font-size:11px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+  .receipt-body{
+    overflow-y:auto;
+    padding:14px 20px;
+    flex:1;
+  }
+  .receipt-empty{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--ink-soft);
+  }
+  .receipt-empty .big{font-size:34px;margin-bottom:8px;}
+  .cart-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    border-bottom:1px dashed var(--line);
+    font-size:13.5px;
+    gap:8px;
+  }
+  .cart-row .name{flex:1;font-weight:500;}
+  .cart-row .row-right{display:flex;align-items:center;gap:10px;}
+  .cart-row .line-total{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--maroon);min-width:62px;text-align:right;}
+  .mini-stepper{display:flex;align-items:center;gap:6px;background:var(--paper-2);border-radius:6px;padding:2px 4px;}
+  .mini-stepper button{
+    border:none;background:none;font-size:15px;font-weight:700;cursor:pointer;
+    width:22px;height:22px;color:var(--navy);
+  }
+  .mini-stepper .v{font-family:'JetBrains Mono',monospace;font-size:12.5px;min-width:16px;text-align:center;}
+  .remove-x{
+    border:none;background:none;color:#B0A98F;font-size:16px;cursor:pointer;line-height:1;padding:2px;
+  }
+  .remove-x:hover{color:var(--maroon);}
+
+  .receipt-total{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding-top:12px;margin-top:4px;border-top:2px dashed var(--line);
+    font-family:'JetBrains Mono',monospace;
+  }
+  .receipt-total .label{font-size:13px;color:var(--ink-soft);}
+  .receipt-total .val{font-size:21px;font-weight:700;color:var(--maroon);}
+
+  .receipt-actions{
+    padding:14px 20px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    border-top:1px solid var(--line);
+  }
+  .btn-checkout{
+    background:var(--whatsapp);
+    color:#fff;
+    border:none;
+    padding:13px;
+    border-radius:9px;
+    font-weight:700;
+    font-size:15px;
+    text-align:center;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.15s;
+  }
+  .btn-checkout:hover{background:var(--whatsapp-dark);}
+  .btn-checkout.disabled{
+    background:#CBD3C9;
+    color:#7B8079;
+    pointer-events:none;
+  }
+  .row-actions{display:flex;gap:9px;}
+  .btn-close, .btn-clear{
+    flex:1;
+    background:#fff;
+    border:1.5px solid var(--line);
+    padding:10px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .btn-clear{color:var(--maroon);border-color:#E8C9C3;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:100px;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--navy);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    z-index:300;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s, transform .2s;
+    box-shadow:0 4px 14px rgba(0,0,0,.2);
+    white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:380px){
+    .products-grid{grid-template-columns:repeat(auto-fill,minmax(135px,1fr));}
+  }
+</style>
 </head>
-<body class="bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-slate-900 dark:text-gray-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <header class="sticky top-0 z-50 shadow-md">
-        <div class="bg-slate-900 text-white px-3 py-2.5 flex items-center justify-between gap-2 md:gap-4">
-            <div class="text-xl md:text-2xl font-black tracking-tight cursor-pointer flex items-center shrink-0" onclick="filterCategory('All')">
-                <span>amazon</span><span class="text-amber-500 font-medium text-sm pt-1">.in</span>
-            </div>
-
-            <div class="hidden md:flex items-center text-xs text-gray-300 cursor-pointer shrink-0">
-                <i class="fa-solid fa-location-dot text-base text-white mr-2"></i>
-                <div>
-                    <p class="text-[10px]">Deliver to</p>
-                    <p class="font-bold text-white text-xs">India</p>
-                </div>
-            </div>
-
-            <div class="flex flex-1 max-w-2xl relative">
-                <input type="text" id="searchInput" oninput="searchProducts()" placeholder="Search Amazon Pro..." class="w-full px-3 py-1.5 text-black bg-white rounded-l focus:outline-none text-xs md:text-sm">
-                <button class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-3 md:px-5 rounded-r transition">
-                    <i class="fa-solid fa-magnifying-glass text-xs md:text-sm"></i>
-                </button>
-            </div>
-
-            <button onclick="toggleDarkMode()" class="p-1.5 rounded-full hover:bg-slate-800 text-amber-400 text-base transition">
-                <i id="darkModeIcon" class="fa-solid fa-moon"></i>
-            </button>
-
-            <div onclick="toggleWishlistModal()" class="relative cursor-pointer p-1.5 hover:outline outline-1 outline-white rounded flex items-center gap-1">
-                <i class="fa-solid fa-heart text-red-500 text-lg md:text-xl"></i>
-                <span class="hidden lg:inline text-xs font-bold">Wishlist</span>
-                <span id="wishlistCount" class="absolute -top-1 -right-1 bg-amber-500 text-slate-900 text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
-            </div>
-
-            <div onclick="toggleCart()" class="relative cursor-pointer p-1.5 hover:outline outline-1 outline-white rounded flex items-center gap-1">
-                <i class="fa-solid fa-cart-shopping text-xl text-amber-500"></i>
-                <span class="hidden md:inline text-xs font-bold mt-1">Cart</span>
-                <span id="cartCount" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
-            </div>
-        </div>
-
-        <div class="bg-slate-800 text-white px-4 py-2 flex gap-4 text-xs md:text-sm overflow-x-auto no-scrollbar border-t border-slate-700">
-            <button onclick="filterCategory('All')" class="hover:text-amber-400 font-semibold whitespace-nowrap">All Categories</button>
-            <button onclick="filterCategory('Electronics')" class="hover:text-amber-400 whitespace-nowrap">Electronics</button>
-            <button onclick="filterCategory('Fashion')" class="hover:text-amber-400 whitespace-nowrap">Fashion</button>
-            <button onclick="filterCategory('Home Appliances')" class="hover:text-amber-400 whitespace-nowrap">Home Appliances</button>
-            <button onclick="filterCategory('Smart Gadgets')" class="hover:text-amber-400 whitespace-nowrap">Smart Gadgets</button>
-            <button onclick="filterCategory('Fitness')" class="hover:text-amber-400 whitespace-nowrap">Fitness</button>
-        </div>
-    </header>
-
-    <div class="bg-gradient-to-b from-amber-500/20 to-gray-100 dark:to-slate-900 py-6 md:py-10 px-4 text-center">
-        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight">Amazon Pro Deals Event</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-1 text-xs md:text-sm">Shop from 100 Real Products with Instant WhatsApp Checkout!</p>
+  <header>
+    <div class="logo-box">
+      <h1>Reyaz Raza Store</h1>
+      <p>Owner: Mohd Reyaz Raza</p>
     </div>
+    <button class="cart-box" onclick="toggleCart()" aria-label="Open cart">
+      🛒 <span id="cart-count">0</span> · <span class="amt">₹<span id="cart-total-mini">0</span></span>
+    </button>
+  </header>
 
-    <main class="max-w-[1400px] mx-auto px-3 md:px-6 py-6 flex-1 w-full">
-        <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-5">
-            </div>
-    </main>
+  <div class="hero">
+    <span class="hero-tag">SUPER MEGA SALE</span>
+    <h2>100+ बेहतरीन प्रोडक्ट्स</h2>
+    <p>सबसे कम दामों में — चुनें, कार्ट में डालें, WhatsApp पर ऑर्डर करें</p>
+  </div>
 
-    <div id="productModal" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-lg max-w-xl w-full p-5 relative shadow-2xl overflow-y-auto max-h-[90vh]">
-            <button onclick="closeProductModal()" class="absolute top-3 right-3 text-2xl font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">&times;</button>
-            <div id="modalContent" class="grid md:grid-cols-2 gap-4 pt-2">
-                </div>
+  <div class="container">
+    <input type="text" id="search" class="search-box" placeholder="🔍 प्रोडक्ट खोजें... (जैसे: charger, shoes)" oninput="renderProducts()">
+
+    <div class="cat-scroll" id="cat-scroll"></div>
+
+    <p class="result-info" id="result-info"></p>
+
+    <div class="products-grid" id="store-products"></div>
+  </div>
+
+  <div class="sticky-cart-bar" id="sticky-bar" onclick="toggleCart()">
+    <div class="left"><span class="count" id="sticky-count">0</span> आइटम कार्ट में</div>
+    <div class="right">₹<span id="sticky-total">0</span> देखें →</div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 <strong>Reyaz Raza Store</strong></p>
+    <p style="margin-top:4px;">Managed by Mohd Reyaz Raza · Order karein WhatsApp par</p>
+  </footer>
+
+  <!-- Cart Modal -->
+  <div id="cartModal" class="cart-modal" onclick="if(event.target===this)toggleCart()">
+    <div class="receipt">
+      <div class="receipt-head">
+        <h2>🧾 आपका कार्ट</h2>
+        <p id="receipt-sub">--</p>
+      </div>
+      <div class="receipt-body" id="receipt-body"></div>
+      <div class="receipt-actions">
+        <a href="#" id="whatsapp-link" target="_blank" class="btn-checkout disabled">
+          <span>📲</span> WhatsApp पर ऑर्डर भेजें
+        </a>
+        <div class="row-actions">
+          <button class="btn-close" onclick="toggleCart()">बंद करें</button>
+          <button class="btn-clear" onclick="clearCart()">कार्ट खाली करें</button>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div id="wishlistModal" class="fixed inset-0 bg-black/70 z-50 hidden backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-lg max-w-md w-full p-5 relative shadow-2xl">
-            <button onclick="toggleWishlistModal()" class="absolute top-3 right-3 text-xl text-gray-500 dark:text-gray-400">&times;</button>
-            <h3 class="text-lg font-bold border-b dark:border-slate-700 pb-2 mb-4"><i class="fa-solid fa-heart text-red-500 mr-2"></i> Your Wishlist</h3>
-            <div id="wishlistItems" class="space-y-3 overflow-y-auto max-h-[60vh] no-scrollbar">
-                </div>
-        </div>
-    </div>
+  <div class="toast" id="toast"></div>
 
-    <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white dark:bg-slate-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
-            <h2 class="text-lg font-bold"><i class="fa-solid fa-cart-shopping mr-2 text-amber-500"></i>Shopping Cart</h2>
-            <button onclick="toggleCart()" class="text-white hover:text-gray-300 text-2xl">&times;</button>
-        </div>
-        
-        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
-            </div>
+<script>
+  // ---------------- Product data ----------------
+  const products = [
+    {id:1,name:"Mobile Cover",price:149,icon:"📱",cat:"electronics"},
+    {id:2,name:"Tempered Glass",price:99,icon:"📱",cat:"electronics"},
+    {id:3,name:"USB Cable",price:149,icon:"🔌",cat:"electronics"},
+    {id:4,name:"Fast Charger",price:399,icon:"⚡",cat:"electronics"},
+    {id:5,name:"Power Bank",price:799,icon:"🔋",cat:"electronics"},
+    {id:6,name:"Bluetooth Earbuds",price:1299,icon:"🎧",cat:"electronics"},
+    {id:7,name:"Smart Watch",price:1599,icon:"⌚",cat:"electronics"},
+    {id:8,name:"Bluetooth Speaker",price:799,icon:"🔊",cat:"electronics"},
+    {id:9,name:"Ring Light",price:499,icon:"💡",cat:"electronics"},
+    {id:10,name:"Tripod",price:599,icon:"📸",cat:"electronics"},
+    {id:11,name:"Phone Holder",price:149,icon:"📳",cat:"electronics"},
+    {id:12,name:"Laptop Stand",price:499,icon:"💻",cat:"electronics"},
+    {id:13,name:"Wireless Mouse",price:399,icon:"🖱️",cat:"electronics"},
+    {id:14,name:"Keyboard",price:699,icon:"⌨️",cat:"electronics"},
+    {id:15,name:"Pendrive 64GB",price:699,icon:"💾",cat:"electronics"},
+    {id:16,name:"Memory Card 64GB",price:599,icon:"🎴",cat:"electronics"},
+    {id:17,name:"LED Bulb",price:149,icon:"💡",cat:"home"},
+    {id:18,name:"Extension Board",price:399,icon:"🔌",cat:"electronics"},
+    {id:19,name:"Backpack",price:799,icon:"🎒",cat:"fashion"},
+    {id:20,name:"Wallet",price:299,icon:"💼",cat:"fashion"},
+    {id:21,name:"Belt",price:299,icon:"🎗️",cat:"fashion"},
+    {id:22,name:"Sunglasses",price:499,icon:"🕶️",cat:"fashion"},
+    {id:23,name:"Cap",price:249,icon:"🧢",cat:"fashion"},
+    {id:24,name:"T-Shirt",price:499,icon:"👕",cat:"fashion"},
+    {id:25,name:"Shirt",price:799,icon:"👔",cat:"fashion"},
+    {id:26,name:"Jeans",price:999,icon:"👖",cat:"fashion"},
+    {id:27,name:"Shoes",price:1499,icon:"👟",cat:"fashion"},
+    {id:28,name:"Perfume",price:599,icon:"🧴",cat:"care"},
+    {id:29,name:"Face Wash",price:249,icon:"🧴",cat:"care"},
+    {id:30,name:"Sunscreen",price:399,icon:"🧴",cat:"care"},
+    {id:31,name:"Shampoo",price:299,icon:"🧴",cat:"care"},
+    {id:32,name:"Hair Oil",price:249,icon:"🛢️",cat:"care"},
+    {id:33,name:"Beard Oil",price:299,icon:"🧔",cat:"care"},
+    {id:34,name:"Trimmer",price:999,icon:"✂️",cat:"care"},
+    {id:35,name:"Hair Dryer",price:1199,icon:"💨",cat:"care"},
+    {id:36,name:"Kitchen Chopper",price:399,icon:"🔪",cat:"home"},
+    {id:37,name:"Vegetable Cutter",price:599,icon:"🔪",cat:"home"},
+    {id:38,name:"Water Bottle",price:249,icon:"🍼",cat:"home"},
+    {id:39,name:"Lunch Box",price:399,icon:"🍱",cat:"home"},
+    {id:40,name:"Electric Kettle",price:1199,icon:"☕",cat:"home"},
+    {id:41,name:"Rice Cooker",price:1699,icon:"🍲",cat:"home"},
+    {id:42,name:"Storage Box",price:399,icon:"📦",cat:"home"},
+    {id:43,name:"Shoe Rack",price:999,icon:"👠",cat:"home"},
+    {id:44,name:"Table Lamp",price:499,icon:"💡",cat:"home"},
+    {id:45,name:"Wall Clock",price:499,icon:"🕒",cat:"home"},
+    {id:46,name:"Bedsheet",price:799,icon:"🛏️",cat:"home"},
+    {id:47,name:"Pillow",price:499,icon:"🛌",cat:"home"},
+    {id:48,name:"Yoga Mat",price:699,icon:"🧘",cat:"fitness"},
+    {id:49,name:"Resistance Band",price:299,icon:"💪",cat:"fitness"},
+    {id:50,name:"Skipping Rope",price:199,icon:"🪢",cat:"fitness"},
+    {id:51,name:"Air Fryer",price:3999,icon:"🍳",cat:"home"},
+    {id:52,name:"Mixer Grinder",price:2499,icon:"🌀",cat:"home"},
+    {id:53,name:"Induction Cooktop",price:1999,icon:"🔥",cat:"home"},
+    {id:54,name:"Vacuum Cleaner",price:4999,icon:"🧹",cat:"home"},
+    {id:55,name:"Steam Iron",price:999,icon:"💨",cat:"home"},
+    {id:56,name:"Electric Toothbrush",price:899,icon:"🪥",cat:"care"},
+    {id:57,name:"Beard Trimmer Kit",price:1299,icon:"✂️",cat:"care"},
+    {id:58,name:"Hair Straightener",price:1499,icon:"💇",cat:"care"},
+    {id:59,name:"Smart LED Strip",price:699,icon:"🌈",cat:"electronics"},
+    {id:60,name:"CCTV Camera",price:2499,icon:"📷",cat:"electronics"},
+    {id:61,name:"Wi-Fi Router",price:1499,icon:"🌐",cat:"electronics"},
+    {id:62,name:"Smart Plug",price:699,icon:"🔌",cat:"electronics"},
+    {id:63,name:"Smart Door Lock",price:6999,icon:"🔒",cat:"electronics"},
+    {id:64,name:"Gaming Mouse",price:999,icon:"🖱️",cat:"electronics"},
+    {id:65,name:"Gaming Keyboard",price:1999,icon:"⌨️",cat:"electronics"},
+    {id:66,name:"Gaming Headset",price:1499,icon:"🎧",cat:"electronics"},
+    {id:67,name:"Webcam",price:999,icon:"📹",cat:"electronics"},
+    {id:68,name:"Laptop Backpack",price:1299,icon:"🎒",cat:"electronics"},
+    {id:69,name:"Office Chair",price:4999,icon:"🪑",cat:"home"},
+    {id:70,name:"Study Table",price:3999,icon:"🪑",cat:"home"},
+    {id:71,name:"Water Purifier",price:7999,icon:"🚰",cat:"home"},
+    {id:72,name:"Electric Lunch Box",price:999,icon:"🍱",cat:"home"},
+    {id:73,name:"Thermos Flask",price:599,icon:"🍼",cat:"home"},
+    {id:74,name:"Coffee Maker",price:2499,icon:"☕",cat:"home"},
+    {id:75,name:"Air Humidifier",price:1499,icon:"💨",cat:"home"},
+    {id:76,name:"Aroma Diffuser",price:999,icon:"💮",cat:"home"},
+    {id:77,name:"Digital Clock",price:799,icon:"⏰",cat:"home"},
+    {id:78,name:"Night Lamp",price:399,icon:"🏮",cat:"home"},
+    {id:79,name:"Curtain Set",price:999,icon:"🖼️",cat:"home"},
+    {id:80,name:"Sofa Cover",price:799,icon:"🛋️",cat:"home"},
+    {id:81,name:"Car Mobile Holder",price:399,icon:"🚗",cat:"car"},
+    {id:82,name:"Car Vacuum Cleaner",price:1499,icon:"🧹",cat:"car"},
+    {id:83,name:"Car Perfume",price:299,icon:"🧴",cat:"car"},
+    {id:84,name:"Car Dash Camera",price:3999,icon:"📷",cat:"car"},
+    {id:85,name:"Helmet",price:1499,icon:"🪖",cat:"car"},
+    {id:86,name:"Raincoat",price:799,icon:"🧥",cat:"car"},
+    {id:87,name:"Travel Bag",price:1299,icon:"🧳",cat:"car"},
+    {id:88,name:"Trolley Bag",price:2999,icon:"🧳",cat:"car"},
+    {id:89,name:"Fitness Band",price:1499,icon:"⌚",cat:"fitness"},
+    {id:90,name:"Dumbbell Set",price:1999,icon:"🏋️",cat:"fitness"},
+    {id:91,name:"Protein Shaker",price:299,icon:"🥤",cat:"fitness"},
+    {id:92,name:"Gym Gloves",price:399,icon:"🧤",cat:"fitness"},
+    {id:93,name:"Cricket Bat",price:1999,icon:"🏏",cat:"fitness"},
+    {id:94,name:"Football",price:799,icon:"⚽",cat:"fitness"},
+    {id:95,name:"Badminton Racket",price:999,icon:"🏸",cat:"fitness"},
+    {id:96,name:"Baby Diaper Pack",price:699,icon:"👶",cat:"baby"},
+    {id:97,name:"Baby Stroller",price:4999,icon:"🛒",cat:"baby"},
+    {id:98,name:"School Bag",price:899,icon:"🎒",cat:"baby"},
+    {id:99,name:"Lunch Carrier",price:599,icon:"🍱",cat:"home"},
+    {id:100,name:"Electric Massager",price:1999,icon:"💆",cat:"care"}
+  ];
 
-        <div class="p-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
-            <div class="flex justify-between text-base font-bold mb-3">
-                <span>Total Amount:</span>
-                <span id="cartTotal" class="text-amber-600 dark:text-amber-400">₹0</span>
-            </div>
-            <button onclick="checkoutViaWhatsApp()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 py-2.5 rounded font-bold shadow transition flex items-center justify-center gap-2 border border-amber-600 cursor-pointer text-sm">
-                <i class="fa-brands fa-whatsapp text-lg text-emerald-800"></i> Place Order via WhatsApp
-            </button>
-        </div>
-    </div>
-
-    <footer class="bg-slate-900 text-gray-300 text-xs mt-10 w-full">
-        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-center py-2.5 font-medium transition">
-            Back to top
-        </button>
-        <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-                <h4 class="text-white font-bold mb-2 text-sm">Get to Know Us</h4>
-                <ul class="space-y-1 text-gray-400"><li>About Us</li><li>Careers</li><li>Press Releases</li><li>Amazon Science</li></ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2 text-sm">Connect with Us</h4>
-                <ul class="space-y-1 text-gray-400"><li>Facebook</li><li>Twitter</li><li>Instagram</li><li>WhatsApp Care</li></ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2 text-sm">Make Money</h4>
-                <ul class="space-y-1 text-gray-400"><li>Sell on Amazon</li><li>Protect Brand</li><li>Affiliate Program</li><li>Fulfillment</li></ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-2 text-sm">Let Us Help You</h4>
-                <ul class="space-y-1 text-gray-400"><li>Your Account</li><li>Returns Centre</li><li>Purchase Protection</li><li>Help</li></ul>
-            </div>
-        </div>
-        <div class="border-t border-slate-800 text-center py-4 text-[11px] text-gray-500">
-            © 2026, Amazon Pro Clone | Fully Responsive 100 Products Store
-        </div>
-    </footer>
-
-    <script>
-        // Set your WhatsApp Number (with country code, no + sign)
-        const WHATSAPP_NUMBER = "917296019690"; 
-
-        // Unsplash Working Product Images Array
-        const sampleImages = [
-            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
-            "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
-            "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80",
-            "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&q=80",
-            "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80",
-            "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&q=80",
-            "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80"
-        ];
-
-        const prefixCategories = ["Electronics", "Fashion", "Home Appliances", "Smart Gadgets", "Fitness"];
-        const products = [];
-        
-        // Generate Dynamic Delivery Date (Today + 3 Days)
-        const getDeliveryDate = () => {
-            const date = new Date();
-            date.setDate(date.getDate() + 3);
-            return date.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
-        };
-
-        // Auto Generate 100 Products
-        let idCounter = 1;
-        prefixCategories.forEach((cat) => {
-            for (let i = 1; i <= 20; i++) {
-                let originalPrice = Math.floor(Math.random() * 7000) + 1200;
-                let discountPercent = Math.floor(Math.random() * 40) + 20;
-                let finalPrice = Math.floor(originalPrice * (1 - discountPercent / 100));
-                let rating = (Math.random() * (5 - 4.0) + 4.0).toFixed(1);
-                let imgIndex = (idCounter - 1) % sampleImages.length;
-
-                products.push({
-                    id: idCounter,
-                    title: `Pro ${cat} Model X${i} - Special Edition`,
-                    category: cat,
-                    originalPrice: originalPrice,
-                    price: finalPrice,
-                    discount: discountPercent,
-                    rating: rating,
-                    delivery: getDeliveryDate(),
-                    image: sampleImages[imgIndex],
-                    description: `High performance, genuine quality product from our ${cat} collection with 1 Year Warranty and Express Shipping.`
-                });
-                idCounter++;
-            }
-        });
-
-        let cart = [];
-        let wishlist = [];
-        let currentCategory = "All";
-        let searchQuery = "";
-
-        // Render Products
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = "";
-
-            const filtered = products.filter(p => {
-                const matchesCat = currentCategory === "All" || p.category === currentCategory;
-                const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCat && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No products found.</div>`;
-                return;
-            }
-
-            filtered.forEach(p => {
-                const isWish = wishlist.includes(p.id) ? 'fa-solid text-red-500' : 'fa-regular';
-                grid.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 rounded p-2.5 border border-gray-200 dark:border-slate-700 flex flex-col justify-between relative group shadow-sm hover:shadow-md transition">
-                        <button onclick="toggleWishlist(${p.id})" class="absolute top-3 right-3 z-10 bg-white/90 dark:bg-slate-700/90 p-1.5 rounded-full shadow cursor-pointer">
-                            <i id="wish-icon-${p.id}" class="${isWish} fa-heart text-xs"></i>
-                        </button>
-                        
-                        <div onclick="openProductModal(${p.id})" class="cursor-pointer">
-                            <div class="w-full aspect-square bg-gray-100 dark:bg-slate-700 rounded overflow-hidden mb-2">
-                                <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            </div>
-                            <span class="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">${p.discount}% OFF</span>
-                            <h3 class="text-xs font-semibold line-clamp-2 mt-1.5 dark:text-gray-100 min-h-[32px]">${p.title}</h3>
-                            
-                            <div class="flex items-center my-1 text-amber-500 text-[10px]">
-                                ${generateStars(p.rating)} <span class="text-gray-500 dark:text-gray-400 ml-1 font-medium text-[10px]">${p.rating}</span>
-                            </div>
-
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-sm font-bold text-slate-900 dark:text-white">₹${p.price}</span>
-                                <span class="text-[10px] text-gray-400 line-through">₹${p.originalPrice}</span>
-                            </div>
-                            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Get by ${p.delivery}</p>
-                        </div>
-
-                        <div class="mt-2 space-y-1">
-                            <button onclick="addToCart(${p.id})" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs py-1 rounded font-semibold transition cursor-pointer">Add to Cart</button>
-                            <button onclick="buyNow(${p.id})" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs py-1 rounded font-semibold transition cursor-pointer">Buy Now</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function generateStars(rating) {
-            let stars = '';
-            for(let i=1; i<=5; i++) {
-                stars += i <= Math.floor(rating) ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
-            }
-            return stars;
-        }
-
-        function searchProducts() { searchQuery = document.getElementById('searchInput').value; renderProducts(); }
-        function filterCategory(cat) { currentCategory = cat; renderProducts(); }
-        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('translate-x-full'); }
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            const icon = document.getElementById('darkModeIcon');
-            icon.className = document.documentElement.classList.contains('dark') ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-
-        function toggleWishlist(id) {
-            if(wishlist.includes(id)) { wishlist = wishlist.filter(item => item !== id); } 
-            else { wishlist.push(id); }
-            document.getElementById('wishlistCount').innerText = wishlist.length;
-            renderProducts();
-            renderWishlistModal();
-        }
-
-        function toggleWishlistModal() { document.getElementById('wishlistModal').classList.toggle('hidden'); renderWishlistModal(); }
-
-        function renderWishlistModal() {
-            const container = document.getElementById('wishlistItems');
-            container.innerHTML = wishlist.length === 0 ? '<p class="text-gray-400 text-center py-4 text-xs">Wishlist is empty</p>' : '';
-            wishlist.forEach(id => {
-                const p = products.find(prod => prod.id === id);
-                container.innerHTML += `
-                    <div class="flex items-center justify-between border-b dark:border-slate-700 pb-2">
-                        <div class="flex items-center gap-2">
-                            <img src="${p.image}" class="w-8 h-8 object-cover rounded">
-                            <span class="text-xs font-semibold line-clamp-1 max-w-[180px]">${p.title}</span>
-                        </div>
-                        <button onclick="toggleWishlist(${p.id})" class="text-red-500 text-xs"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-            });
-        }
-
-        function openProductModal(id) {
-            const p = products.find(prod => prod.id === id);
-            const modal = document.getElementById('productModal');
-            document.getElementById('modalContent').innerHTML = `
-                <div class="w-full aspect-square bg-gray-100 rounded overflow-hidden">
-                    <img src="${p.image}" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <span class="text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-slate-700 px-2 py-0.5 rounded">${p.category}</span>
-                        <h2 class="text-base font-bold mt-1 text-slate-900 dark:text-white">${p.title}</h2>
-                        <div class="flex items-center my-1.5 text-amber-500 text-xs">
-                            ${generateStars(p.rating)} <span class="ml-1 text-gray-500 text-[10px]">${p.rating} Stars</span>
-                        </div>
-                        <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">${p.description}</p>
-                        <div class="mt-3 flex items-baseline gap-2">
-                            <span class="text-xl font-bold text-slate-900 dark:text-white">₹${p.price}</span>
-                            <span class="text-xs text-gray-400 line-through">₹${p.originalPrice}</span>
-                            <span class="text-xs text-red-600 font-bold">(${p.discount}% OFF)</span>
-                        </div>
-                        <p class="text-[11px] text-emerald-600 font-medium mt-1">✓ Express Delivery by ${p.delivery}</p>
-                    </div>
-                    <div class="mt-4 flex gap-2">
-                        <button onclick="addToCart(${p.id}); closeProductModal();" class="flex-1 bg-amber-400 hover:bg-amber-500 py-2 rounded font-bold text-xs cursor-pointer">Add To Cart</button>
-                        <button onclick="buyNow(${p.id})" class="flex-1 bg-amber-500 hover:bg-amber-600 py-2 rounded font-bold text-xs cursor-pointer">Buy Now</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.remove('hidden');
-        }
-        function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const existing = cart.find(item => item.id ===
+  const categories = [
+    {key:"all",  label:"सभी",             icon:"✨"},
+    {key:"electronics", label:"Electronics", icon:"📱"},
+    {key:"fashion", label:"Fashion",        icon:"👕"},
+    {key:"care", label:"Persona
