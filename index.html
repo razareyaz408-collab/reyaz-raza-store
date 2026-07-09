@@ -41,11 +41,7 @@
 <body>
 
     <header>
-        <div class="logo-box">
-            <h1>Reyaz Raza Store</h1>
-            <p>Owner: Mohd Reyaz Raza</p>
-        </div>
-        <div class="cart-box" onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
+        onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
     </header>
 <div style="background:#ffcc00;color:#000;padding:12px;text-align:center;font-weight:bold;font-size:16px;">
 🎉 Welcome to Reyaz Raza Online Store | 🚚 Free Delivery on Selected Products | 💥 Big Discount Available
@@ -65,7 +61,26 @@
     </div>
 
     <!-- Cart Modal -->
-    <div id="cartModal" class="cart-modal">
+    <header style="background:#131921;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;">
+
+<div>
+<h1 style="color:#ff9900;margin:0;font-size:28px;">
+🛒 Reyaz Raza Store
+</h1>
+
+<p style="color:white;margin-top:5px;font-size:14px;">
+Best Quality Products • Fast Delivery • Trusted Store
+</p>
+</div>
+
+<div onclick="toggleCart()"
+style="background:#ff9900;color:black;padding:10px 18px;border-radius:8px;font-weight:bold;cursor:pointer;">
+
+🛒 Cart (<span id="cart-count">0</span>)
+
+</div>
+
+    </header><div id="cartModal" class="cart-modal">
         <div class="cart-content">
             <h2>आपका कार्ट (Your Cart)</h2>
             <div id="cart-items">कार्ट अभी खाली है।</div>
