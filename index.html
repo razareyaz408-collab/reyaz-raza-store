@@ -1,274 +1,339 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MegaStore | Amazon Style</title>
-    <!-- Tailwind CSS for Professional UI -->
+    <title>Amazon Pro | Ultimate Store</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .amazon-bg { background-color: #131921; }
-        .amazon-yellow { background-color: #f0c14b; border-color: #a88734 #9c7e31 #846a29; }
-        .amazon-yellow:hover { background-color: #ddb347; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans antsialiased">
+<body class="bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-slate-900 dark:text-gray-100">
 
-    <!-- NAVIGATION BAR -->
-    <header class="sticky top-0 z-50">
+    <!-- AMAZON HEADER -->
+    <header class="sticky top-0 z-50 shadow-md">
         <!-- Top Nav -->
-        <div class="amazon-bg text-white px-4 py-2 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <div class="text-2xl font-bold tracking-wider cursor-pointer" onclick="filterCategory('All')">
-                Mega<span class="text-amber-500">Store</span>
+        <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="text-2xl font-black tracking-tight cursor-pointer flex items-center" onclick="filterCategory('All')">
+                <span>amazon</span><span class="text-amber-500 font-medium text-lg pt-1">.in</span>
             </div>
 
-            <!-- Search Bar -->
-            <div class="flex flex-1 max-w-2xl mx-4">
-                <input type="text" id="searchInput" oninput="searchProducts()" placeholder="Search 100+ products..." class="w-full px-4 py-2 text-black rounded-l-md focus:outline-none">
-                <button class="bg-amber-500 text-slate-900 px-6 rounded-r-md hover:bg-amber-600 transition">
+            <!-- Deliver To (Desktop Only) -->
+            <div class="hidden md:flex items-center text-xs text-gray-300 cursor-pointer">
+                <i class="fa-solid fa-location-dot text-base text-white mr-2 mt-2"></i>
+                <div>
+                    <p>Deliver to</p>
+                    <p class="font-bold text-white text-sm">India</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Search Bar -->
+            <div class="flex flex-1 max-w-2xl relative">
+                <input type="text" id="searchInput" oninput="searchProducts()" placeholder="Search Amazon Pro..." class="w-full px-4 py-2 text-black bg-white dark:bg-gray-200 rounded-l focus:outline-none text-sm">
+                <button class="bg-amber-500 hover:bg-amber-600 text-slate-900 px-6 rounded-r transition">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
 
+            <!-- Dark Mode Toggle -->
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-slate-800 text-amber-400 text-lg transition">
+                <i id="darkModeIcon" class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- Wishlist Heart Link -->
+            <div onclick="toggleWishlistModal()" class="relative cursor-pointer p-2 hover:outline outline-1 outline-white rounded flex items-center gap-1">
+                <i class="fa-solid fa-heart text-red-500 text-xl"></i>
+                <span class="hidden lg:inline text-sm font-bold">Wishlist</span>
+                <span id="wishlistCount" class="absolute -top-1 right-1 bg-amber-500 text-slate-900 text-xs w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            </div>
+
             <!-- Cart Icon -->
-            <div class="relative cursor-pointer flex items-center gap-2 p-2 border border-transparent hover:border-white rounded" onclick="toggleCart()">
+            <div onclick="toggleCart()" class="relative cursor-pointer p-2 hover:outline outline-1 outline-white rounded flex items-center gap-1">
                 <i class="fa-solid fa-cart-shopping text-2xl text-amber-500"></i>
-                <span class="hidden md:inline font-semibold">Cart</span>
+                <span class="hidden md:inline text-sm font-bold mt-2">Cart</span>
                 <span id="cartCount" class="absolute -top-1 left-6 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
             </div>
         </div>
 
-        <!-- Categories Ribbon -->
-        <div class="bg-slate-700 text-white px-4 py-1.5 flex gap-4 text-sm overflow-x-auto no-scrollbar">
-            <button onclick="filterCategory('All')" class="hover:text-amber-400 whitespace-nowrap font-medium">All Products</button>
+        <!-- Categories Sub-Ribbon -->
+        <div class="bg-slate-800 text-white px-4 py-2 flex gap-5 text-sm overflow-x-auto no-scrollbar border-t border-slate-700">
+            <button onclick="filterCategory('All')" class="hover:text-amber-400 font-semibold whitespace-nowrap">All Categories</button>
             <button onclick="filterCategory('Electronics')" class="hover:text-amber-400 whitespace-nowrap">Electronics</button>
             <button onclick="filterCategory('Fashion')" class="hover:text-amber-400 whitespace-nowrap">Fashion</button>
-            <button onclick="filterCategory('Home & Kitchen')" class="hover:text-amber-400 whitespace-nowrap">Home & Kitchen</button>
-            <button onclick="filterCategory('Books')" class="hover:text-amber-400 whitespace-nowrap">Books</button>
-            <button onclick="filterCategory('Fitness')" class="hover:text-amber-400 whitespace-nowrap">Fitness</button>
+            <button onclick="filterCategory('Home Appliances')" class="hover:text-amber-400 whitespace-nowrap">Home & Appliances</button>
+            <button onclick="filterCategory('Gadgets')" class="hover:text-amber-400 whitespace-nowrap">Smart Gadgets</button>
+            <button onclick="filterCategory('Fitness & Sports')" class="hover:text-amber-400 whitespace-nowrap">Fitness & Sports</button>
         </div>
     </header>
 
-    <!-- HERO BANNER -->
-    <div class="bg-gradient-to-b from-amber-100 to-gray-100 py-8 px-4 text-center border-b border-gray-200">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800">Welcome to MegaStore Super Sale</h1>
-        <p class="text-gray-600 mt-2 text-sm md:text-base">Explore 100 premium products with instant WhatsApp checkout!</p>
+    <!-- HERO CAROUSEL / BANNER -->
+    <div class="bg-gradient-to-b from-amber-500/20 to-gray-100 dark:to-slate-900 py-12 px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">Amazon Pro Deals Event</h1>
+        <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm md:text-base">Shop from 100+ Live Premium Products with Lightning Fast WhatsApp Delivery.</p>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Products Grid -->
-        <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <!-- Products will be injected by JavaScript -->
+    <!-- MAIN PRODUCT SECTION -->
+    <main class="max-w-[1400px] mx-auto px-4 py-8">
+        <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            <!-- 100 Dynamic Products will inject here -->
         </div>
     </main>
 
+    <!-- PRODUCT DETAILS POPUP MODAL -->
+    <div id="productModal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-lg max-w-2xl w-full p-6 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-2xl font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">&times;</button>
+            <div id="modalContent" class="grid md:grid-cols-2 gap-6 pt-4">
+                <!-- Modal details inject here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- WISHLIST MODAL -->
+    <div id="wishlistModal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-lg max-w-md w-full p-6 relative shadow-2xl">
+            <button onclick="toggleWishlistModal()" class="absolute top-4 right-4 text-xl text-gray-500 dark:text-gray-400">&times;</button>
+            <h3 class="text-xl font-bold border-b pb-2 mb-4"><i class="fa-solid fa-heart text-red-500 mr-2"></i> Your Wishlist</h3>
+            <div id="wishlistItems" class="space-y-4 overflow-y-auto max-h-[60vh] no-scrollbar">
+                <!-- Wishlist items inject here -->
+            </div>
+        </div>
+    </div>
+
     <!-- CART SIDEBAR -->
-    <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="amazon-bg text-white p-4 flex justify-between items-center">
-            <h2 class="text-xl font-bold"><i class="fa-solid fa-cart-shopping mr-2"></i>Shopping Cart</h2>
+    <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full max-w-md bg-white dark:bg-slate-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+            <h2 class="text-xl font-bold"><i class="fa-solid fa-cart-shopping mr-2 text-amber-500"></i>Shopping Cart</h2>
             <button onclick="toggleCart()" class="text-white hover:text-gray-300 text-2xl">&times;</button>
         </div>
         
-        <!-- Cart Items List -->
-        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-4">
-            <!-- Cart items injected here -->
+        <!-- Cart Body -->
+        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+            <!-- Items inject here -->
         </div>
 
         <!-- Cart Footer -->
-        <div class="p-4 border-t border-gray-200 bg-gray-50">
+        <div class="p-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
             <div class="flex justify-between text-lg font-bold mb-4">
                 <span>Total Amount:</span>
-                <span id="cartTotal">₹0</span>
+                <span id="cartTotal" class="text-amber-600 dark:text-amber-400">₹0</span>
             </div>
-            <button onclick="checkoutViaWhatsApp()" class="w-full amazon-yellow text-slate-900 py-3 rounded-lg font-semibold shadow md:hover:shadow-lg transition flex items-center justify-center gap-2 text-base border">
-                <i class="fa-brands fa-whatsapp text-xl text-green-600"></i> Order via WhatsApp
+            <button onclick="checkoutViaWhatsApp()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 py-3 rounded font-bold shadow transition flex items-center justify-center gap-2 border border-amber-600 cursor-pointer">
+                <i class="fa-brands fa-whatsapp text-xl text-emerald-800"></i> Place Order via WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- JAVASCRIPT FOR DYNAMIC 100 PRODUCTS & LOGIC -->
+    <!-- PROFESSIONAL FOOTER -->
+    <footer class="bg-slate-900 text-gray-300 text-sm mt-12">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-center py-3 font-medium transition">
+            Back to top
+        </button>
+        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-white font-bold mb-3">Get to Know Us</h4>
+                <ul class="space-y-2 text-xs"><li>About Us</li><li>Careers</li><li>Press Releases</li><li>Amazon Science</li></ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Connect with Us</h4>
+                <ul class="space-y-2 text-xs"><li>Facebook</li><li>Twitter</li><li>Instagram</li><li>WhatsApp Care</li></ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Make Money with Us</h4>
+                <ul class="space-y-2 text-xs"><li>Sell on Amazon</li><li>Protect Your Brand</li><li>Become an Affiliate</li><li>Fulfilment by Amazon</li></ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3">Let Us Help You</h4>
+                <ul class="space-y-2 text-xs"><li>Your Account</li><li>Returns Centre</li><li>100% Purchase Protection</li><li>Help Help</li></ul>
+            </div>
+        </div>
+        <div class="border-t border-slate-800 text-center py-6 text-xs text-gray-400">
+            © 2026, Amazon Pro Clone - Dynamic 100 Products Portfolio. Built with Tailwind CSS.
+        </div>
+    </footer>
+
+    <!-- LOGIC INTEGRATION SCRIPT -->
     <script>
-        // WhatsApp Configuration
-        const WHATSAPP_NUMBER = "917296019690"; // Apna 10-digit WhatsApp number country code ke sath yahan dalein
+        const WHATSAPP_NUMBER = "917295019690"; // Apna WhatsApp Number dalein code deployment se pehle
 
-        // Category wise configuration to generate 100 distinct products
-        const categories = ["Electronics", "Fashion", "Home & Kitchen", "Books", "Fitness"];
+        const prefixCategories = ["Electronics", "Fashion", "Home Appliances", "Gadgets", "Fitness & Sports"];
         const products = [];
+        
+        // Dynamic Delivery Date Logic (Today + 3 Days)
+        const getDeliveryDate = () => {
+            const date = new Date();
+            date.setDate(date.getDate() + 3);
+            return date.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+        };
 
-        // Generating 100 realistic mock products dynamically
+        // Auto Generate 100 Real Sounding Products
         let idCounter = 1;
-        categories.forEach(cat => {
-            for(let i = 1; i <= 20; i++) {
-                let price = Math.floor(Math.random() * 4500) + 299; // Random price between 299 and 4799
-                let rating = (Math.random() * (5 - 3.8) + 3.8).toFixed(1);
-                let imageId = idCounter + 10; // Unsplash unique image identifier
+        prefixCategories.forEach((cat, catIdx) => {
+            for (let i = 1; i <= 20; i++) {
+                let originalPrice = Math.floor(Math.random() * 8000) + 999;
+                let discountPercent = Math.floor(Math.random() * 40) + 20; // 20% to 60%
+                let finalPrice = Math.floor(originalPrice * (1 - discountPercent / 100));
+                let rating = (Math.random() * (5 - 3.9) + 3.9).toFixed(1);
+                let imageId = 20 + idCounter; 
 
                 products.push({
                     id: idCounter,
-                    title: `${cat} Premium Item #${i}`,
+                    title: `${cat} Premium Pro Luxury Item Edition V${i}`,
                     category: cat,
-                    price: price,
+                    originalPrice: originalPrice,
+                    price: finalPrice,
+                    discount: discountPercent,
                     rating: rating,
-                    image: `https://picsum.photos/id/${imageId}/300/300` // Reliable free dynamic images
+                    delivery: getDeliveryDate(),
+                    image: `https://picsum.photos/id/${imageId}/400/400`,
+                    description: `This premium item from our ${cat} range offers maximum quality, heavy durability, and smart styling suitable for professional online shoppers.`
                 });
                 idCounter++;
             }
         });
 
         let cart = [];
+        let wishlist = [];
         let currentCategory = "All";
         let searchQuery = "";
 
-        // Function to Render Products to UI
+        // UI Product Cards Render
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = "";
 
             const filtered = products.filter(p => {
-                const matchesCategory = currentCategory === "All" || p.category === currentCategory;
+                const matchesCat = currentCategory === "All" || p.category === currentCategory;
                 const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCategory && matchesSearch;
+                return matchesCat && matchesSearch;
             });
 
-            if(filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500 text-lg">No products found matching your search.</div>`;
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-400">No products match your filters.</div>`;
                 return;
             }
 
             filtered.forEach(p => {
+                const isWish = wishlist.includes(p.id) ? 'fa-solid text-red-500' : 'fa-regular';
                 grid.innerHTML += `
-                    <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col justify-between hover:shadow-md transition">
-                        <div>
-                            <div class="w-full h-40 bg-gray-100 rounded overflow-hidden mb-3">
-                                <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">
+                    <div class="bg-white dark:bg-slate-800 rounded p-3 border border-gray-200 dark:border-slate-700 flex flex-col justify-between relative group shadow-xs hover:shadow-md transition">
+                        <button onclick="toggleWishlist(${p.id})" class="absolute top-3 right-3 z-10 bg-white/80 dark:bg-slate-700/80 p-1.5 rounded-full shadow-xs cursor-pointer">
+                            <i id="wish-icon-${p.id}" class="${isWish} fa-heart"></i>
+                        </button>
+                        
+                        <div onclick="openProductModal(${p.id})" class="cursor-pointer">
+                            <div class="w-full aspect-square bg-gray-100 dark:bg-slate-700 rounded overflow-hidden mb-2">
+                                <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             </div>
-                            <span class="text-xs text-gray-500 uppercase tracking-wider">${p.category}</span>
-                            <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 mt-1 min-h-[40px]">${p.title}</h3>
-                            <div class="flex items-center my-1.5 text-amber-500 text-xs">
-                                <i class="fa-solid fa-star"></i> <span class="text-gray-600 ml-1">${p.rating} (50+)</span>
+                            <span class="bg-red-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">${p.discount}% OFF</span>
+                            <h3 class="text-xs md:text-sm font-semibold line-clamp-2 mt-2 group-hover:text-amber-600 transition min-h-[40px]">${p.title}</h3>
+                            
+                            <div class="flex items-center my-1 text-amber-500 text-xs">
+                                ${generateStars(p.rating)} <span class="text-gray-500 dark:text-gray-400 ml-1 font-medium">${p.rating}</span>
                             </div>
+
+                            <div class="flex items-baseline gap-1.5">
+                                <span class="text-base font-bold text-slate-900 dark:text-white">₹${p.price}</span>
+                                <span class="text-xs text-gray-400 line-through">₹${p.originalPrice}</span>
+                            </div>
+                            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium mt-1">Get it by ${p.delivery}</p>
                         </div>
-                        <div>
-                            <div class="text-lg font-bold text-slate-900 mb-2">₹${p.price.toLocaleString('en-IN')}</div>
-                            <button onclick="addToCart(${p.id})" class="w-full text-xs amazon-yellow text-slate-900 py-1.5 px-2 rounded border transition font-medium cursor-pointer">
-                                Add to Cart
-                            </button>
+
+                        <div class="mt-3 space-y-1.5">
+                            <button onclick="addToCart(${p.id})" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs py-1.5 rounded font-semibold transition cursor-pointer">Add to Cart</button>
+                            <button onclick="buyNow(${p.id})" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs py-1.5 rounded font-semibold transition cursor-pointer">Buy Now</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Search & Filter Logics
-        function searchProducts() {
-            searchQuery = document.getElementById('searchInput').value;
-            renderProducts();
+        function generateStars(rating) {
+            let stars = '';
+            for(let i=1; i<=5; i++) {
+                stars += i <= Math.floor(rating) ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+            }
+            return stars;
         }
 
-        function filterCategory(cat) {
-            currentCategory = cat;
-            renderProducts();
+        // Feature Logics
+        function searchProducts() { searchQuery = document.getElementById('searchInput').value; renderProducts(); }
+        function filterCategory(cat) { currentCategory = cat; renderProducts(); }
+        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('translate-x-full'); }
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('darkModeIcon');
+            icon.className = document.documentElement.classList.contains('dark') ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
+
+        // Wishlist Mechanics
+        function toggleWishlist(id) {
+            if(wishlist.includes(id)) { wishlist = wishlist.filter(item => item !== id); } 
+            else { wishlist.push(id); }
+            document.getElementById('wishlistCount').innerText = wishlist.length;
+            renderProducts();
+            renderWishlistModal();
+        }
+
+        function toggleWishlistModal() { document.getElementById('wishlistModal').classList.toggle('hidden'); renderWishlistModal(); }
+
+        function renderWishlistModal() {
+            const container = document.getElementById('wishlistItems');
+            container.innerHTML = wishlist.length === 0 ? '<p class="text-gray-400 text-center py-4">Wishlist is empty</p>' : '';
+            wishlist.forEach(id => {
+                const p = products.find(prod => prod.id === id);
+                container.innerHTML += `
+                    <div class="flex items-center justify-between border-b dark:border-slate-700 pb-2">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.image}" class="w-10 h-10 object-cover rounded">
+                            <span class="text-xs font-semibold line-clamp-1">${p.title}</span>
+                        </div>
+                        <button onclick="toggleWishlist(${p.id})" class="text-red-500 text-sm"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        // Product Modal Details Popup
+        function openProductModal(id) {
+            const p = products.find(prod => prod.id === id);
+            const modal = document.getElementById('productModal');
+            document.getElementById('modalContent').innerHTML = `
+                <div class="w-full aspect-square bg-gray-100 rounded overflow-hidden">
+                    <img src="${p.image}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 dark:bg-slate-700 px-2 py-1 rounded">${p.category}</span>
+                        <h2 class="text-xl font-bold mt-2 text-slate-900 dark:text-white">${p.title}</h2>
+                        <div class="flex items-center my-2 text-amber-500 text-sm">
+                            ${generateStars(p.rating)} <span class="ml-2 text-gray-500 text-xs">${p.rating} Stars Rating</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">${p.description}</p>
+                        <div class="mt-4 flex items-baseline gap-3">
+                            <span class="text-2xl font-black text-slate-900 dark:text-white">₹${p.price}</span>
+                            <span class="text-sm text-gray-400 line-through">M.R.P: ₹${p.originalPrice}</span>
+                            <span class="text-sm text-red-600 font-bold">(${p.discount}% OFF)</span>
+                        </div>
+                        <p class="text-xs text-emerald-600 font-medium mt-1">✓ Fast Delivery Scheduled by ${p.delivery}</p>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button onclick="addToCart(${p.id}); closeProductModal();" class="flex-1 bg-amber-400 hover:bg-amber-500 py-2.5 rounded font-bold text-xs cursor-pointer">Add To Cart</button>
+                        <button onclick="buyNow(${p.id})" class="flex-1 bg-amber-500 hover:bg-amber-600 py-2.5 rounded font-bold text-xs cursor-pointer">Buy Now</button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+        function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
         // Cart Actions
-        function toggleCart() {
-            const sidebar = document.getElementById('cartSidebar');
-            sidebar.classList.toggle('translate-x-full');
-        }
-
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
-            const existing = cart.find(item => item.id === productId);
-
-            if(existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            updateCartUI();
-        }
-
-        function updateQuantity(productId, change) {
-            const item = cart.find(p => p.id === productId);
-            if(!item) return;
-
-            item.quantity += change;
-            if(item.quantity <= 0) {
-                cart = cart.filter(p => p.id !== productId);
-            }
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            // Count
-            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-            document.getElementById('cartCount').innerText = totalItems;
-
-            // List
-            const cartItemsContainer = document.getElementById('cartItems');
-            cartItemsContainer.innerHTML = "";
-
-            let totalPrice = 0;
-
-            if(cart.length === 0) {
-                cartItemsContainer.innerHTML = `<div class="text-center text-gray-400 py-8">Your cart is empty</div>`;
-            } else {
-                cart.forEach(item => {
-                    totalPrice += item.price * item.quantity;
-                    cartItemsContainer.innerHTML += `
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                            <div class="flex items-center gap-3">
-                                <img src="${item.image}" class="w-12 h-12 object-cover rounded">
-                                <div>
-                                    <h4 class="text-sm font-semibold text-gray-800 line-clamp-1">${item.title}</h4>
-                                    <p class="text-xs text-gray-500">₹${item.price} x ${item.quantity}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 text-gray-800 px-2 py-0.5 rounded text-sm font-bold">-</button>
-                                <span class="font-medium text-sm">${item.quantity}</span>
-                                <button onclick="updateQuantity(${item.id}, 1)" class="bg-gray-200 text-gray-800 px-2 py-0.5 rounded text-sm font-bold">+</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            document.getElementById('cartTotal').innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
-        }
-
-        // Checkout & WhatsApp Message Generator
-        function checkoutViaWhatsApp() {
-            if(cart.length === 0) {
-                alert("Aapka cart khali hai!");
-                return;
-            }
-
-            let message = `*New Order Received from MegaStore*\n`;
-            message += `-----------------------------------\n`;
-            
-            cart.forEach((item, index) => {
-                message += `${index + 1}. *${item.title}*\n`;
-                message += `   Qty: ${item.quantity} | Price: ₹${item.price * item.quantity}\n`;
-            });
-
-            const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            message += `-----------------------------------\n`;
-            message += `*Total Payable Amount: ₹${total.toLocaleString('en-IN')}*\n\n`;
-            message += `Please confirm my order.`;
-
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Initial Load
-        renderProducts();
-    </script>
-</body>
-</html>
+            const existing = cart.find(item => ite
