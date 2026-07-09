@@ -82,7 +82,7 @@
     <script>
         // All 100 Products Array Data
         const products = [
-            { id: 1, name: "Mobile Cover", price: 149, icon: "📱" },
+            { id: 1, name: "Mobile Cover", price: 149, image: "https://via.placeholder.com/200x200?text=Mobile+Cover"},
             { id: 2, name: "Tempered Glass", price: 99, icon: "📱" },
             { id: 3, name: "USB Cable", price: 149, icon: "🔌" },
             { id: 4, name: "Fast Charger", price: 399, icon: "⚡" },
@@ -195,7 +195,7 @@
             productsList.forEach(product => {
                 grid.innerHTML += `
                     <div class="product-card">
-                        <div class="p-icon">${product.icon}</div>
+                        <img src="${product.image}" style="width:100%;height:160px;object-fit:cover;border-radius:8px;">
                         <div class="product-title">${product.name}</div>
                         <div class="product-price">₹${product.price}</div>
                         <button class="btn-add" onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
